@@ -1,32 +1,34 @@
-import ir.hfathi.template.buildsrc.build_type.BuildType.BuildType.DEBUG
-import ir.hfathi.template.buildsrc.build_type.BuildType.BuildType.RELEASE
-import ir.hfathi.template.buildsrc.config.AndroidConfig.APPLICATION_ID
-import ir.hfathi.template.buildsrc.config.AndroidConfig.COMPILE_SDK
-import ir.hfathi.template.buildsrc.config.AndroidConfig.MIN_SDK
-import ir.hfathi.template.buildsrc.config.AndroidConfig.MULTI_DEX_ENABLED
-import ir.hfathi.template.buildsrc.config.AndroidConfig.TARGET_SDK
-import ir.hfathi.template.buildsrc.config.AndroidConfig.TEST_INSTRUMENTATION_RUNNER
-import ir.hfathi.template.buildsrc.config.AndroidConfig.VECTOR_DRAWABLES_USE_SUPPORT_LIBRARY
-import ir.hfathi.template.buildsrc.config.AndroidConfig.VERSION_CODE
-import ir.hfathi.template.buildsrc.config.AndroidConfig.VERSION_NAME
-import ir.hfathi.template.buildsrc.config.SigningConfig
-import ir.hfathi.template.buildsrc.config.SigningConfig.NAME
-import org.jetbrains.kotlin.konan.properties.Properties
-import ir.hfathi.template.buildsrc.build_type.BuildTypeDebug
-import ir.hfathi.template.buildsrc.build_type.BuildTypeRelease
-import ir.hfathi.template.buildsrc.dependency.CoreVersion.JAVA_VERSION
-import ir.hfathi.template.buildsrc.dependency.LibraryDependency.ACTIVITY_COMPOSE
-import ir.hfathi.template.buildsrc.dependency.LibraryVersion.COMPOSE_UI
-import ir.hfathi.template.buildsrc.dependency.LibraryDependency.LIFECYCLE_RUNTIME_KTX
-import ir.hfathi.template.buildsrc.dependency.LibraryDependency.ROOT_BEER
-import ir.hfathi.template.buildsrc.dependency.LibraryDependency.MULTI_DEX
-import ir.hfathi.template.buildsrc.dependency.addAndroidTestDependencies
-import ir.hfathi.template.buildsrc.dependency.addPresentationModulesDependencies
-import ir.hfathi.template.buildsrc.dependency.addTestDependencies
+import ir.hfathi.buildsrc.build_type.BuildType.BuildType.DEBUG
+import ir.hfathi.buildsrc.build_type.BuildType.BuildType.RELEASE
+import ir.hfathi.buildsrc.config.AndroidConfig.APPLICATION_ID
+import ir.hfathi.buildsrc.config.AndroidConfig.COMPILE_SDK
+import ir.hfathi.buildsrc.config.AndroidConfig.MIN_SDK
+import ir.hfathi.buildsrc.config.AndroidConfig.MULTI_DEX_ENABLED
+import ir.hfathi.buildsrc.config.AndroidConfig.TARGET_SDK
+import ir.hfathi.buildsrc.config.AndroidConfig.TEST_INSTRUMENTATION_RUNNER
+import ir.hfathi.buildsrc.config.AndroidConfig.VECTOR_DRAWABLES_USE_SUPPORT_LIBRARY
+import ir.hfathi.buildsrc.config.AndroidConfig.VERSION_CODE
+import ir.hfathi.buildsrc.config.AndroidConfig.VERSION_NAME
+import ir.hfathi.buildsrc.build_type.BuildTypeDebug
+import ir.hfathi.buildsrc.build_type.BuildTypeRelease
+import ir.hfathi.buildsrc.dependency.CoreVersion.JAVA_VERSION
+import ir.hfathi.buildsrc.dependency.LibraryDependency.ACTIVITY_COMPOSE
+import ir.hfathi.buildsrc.dependency.LibraryDependency.HILT
+import ir.hfathi.buildsrc.dependency.LibraryDependency.HILT_COMPILER
+import ir.hfathi.buildsrc.dependency.LibraryDependency.HILT_NAVIGATION_COMPOSE
+import ir.hfathi.buildsrc.dependency.LibraryVersion.COMPOSE_UI
+import ir.hfathi.buildsrc.dependency.LibraryDependency.LIFECYCLE_RUNTIME_KTX
+import ir.hfathi.buildsrc.dependency.LibraryDependency.ROOT_BEER
+import ir.hfathi.buildsrc.dependency.LibraryDependency.MULTI_DEX
+import ir.hfathi.buildsrc.dependency.addAndroidTestDependencies
+import ir.hfathi.buildsrc.dependency.addPresentationModulesDependencies
+import ir.hfathi.buildsrc.dependency.addTestDependencies
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id(ir.hfathi.buildsrc.dependency.GradlePluginId.ANDROID_APPLICATION)
+    id(ir.hfathi.buildsrc.dependency.GradlePluginId.KOTLIN_ANDROID)
+    id(ir.hfathi.buildsrc.dependency.GradlePluginId.KOTLIN_KAPT)
+    id(ir.hfathi.buildsrc.dependency.GradlePluginId.HILT_ANDROID)
 }
 
 android {
@@ -101,14 +103,19 @@ android {
     }
 }
 
-
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     addPresentationModulesDependencies()
+    implementation(HILT_NAVIGATION_COMPOSE)
     implementation(LIFECYCLE_RUNTIME_KTX)
     implementation(ACTIVITY_COMPOSE)
     implementation(ROOT_BEER)
     implementation(MULTI_DEX)
+    implementation(HILT)
+    kapt(HILT_COMPILER)
 
     addTestDependencies()
     addAndroidTestDependencies()
